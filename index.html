@@ -6,6 +6,7 @@
 <title>Minari Trister</title>
 <meta name="description" content="Programme, Spiele, Videos und Grafiken von Minari Trister">
 <style>
+  /* Design 01 "Future 01" – Vorbild: System Status 2.0 */
   @property --winkel { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
   :root {
@@ -15,9 +16,10 @@
     --a-glow: color-mix(in srgb, var(--a) 55%, transparent);
     --a-hauch: color-mix(in srgb, var(--a) 14%, transparent);
     --grund: #0A0A0A;
-    --box: #121212;
+    --box: rgba(18, 18, 18, .85);                         /* Kästen 85 % deckend */
     --grau: #8A8A8A;
     --weiss: #F2F2F2;
+    --dpr: 1;                                             /* Bildschirm-Vergrößerung (per Skript) */
   }
 
   * { box-sizing: border-box; }
@@ -28,11 +30,11 @@
     font-family: "Segoe UI", system-ui, sans-serif;
     min-height: 100vh;
   }
-  a { color: var(--a-hell); }
+  a { color: var(--weiss); }
 
   /* ---------- Fenster ---------- */
   .fenster {
-    position: relative; max-width: 1060px; margin: 0 auto;
+    position: relative; max-width: 1080px; margin: 0 auto;
     border-radius: 12px; padding: 2px;
     background: conic-gradient(from var(--winkel),
       var(--a) 0deg, var(--a) 250deg, var(--a-hell) 300deg, #fff 320deg, var(--a-hell) 340deg, var(--a) 360deg);
@@ -40,34 +42,60 @@
   }
   @keyframes drehen { to { --winkel: 360deg; } }
   .innen {
-    border-radius: 10px; overflow: hidden;
+    position: relative; border-radius: 10px; overflow: hidden;
     background:
       radial-gradient(ellipse 60% 50% at 100% 100%, var(--a-hauch), transparent 70%),
       var(--grund);
   }
+  /* Glasplatte: dezent, Glanz erst unter dem Kopfbereich, klickt nicht mit */
+  .glas {
+    position: absolute; inset: 0; pointer-events: none; z-index: 5; border-radius: 10px;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,.16), inset -1px -1px 0 rgba(255,255,255,.10);
+  }
+  .glas::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; top: var(--kopf, 230px);
+    background:
+      linear-gradient(115deg, transparent 22%, rgba(255,255,255,.055) 25%, transparent 30%),
+      linear-gradient(115deg, transparent 58%, rgba(255,255,255,.04) 61%, transparent 64%),
+      linear-gradient(180deg, transparent 0, rgba(255,255,255,.047) 40px, transparent 420px);
+  }
+
   .titelleiste {
     display: flex; align-items: center; gap: 10px;
     padding: 12px 18px; color: var(--grau);
     font-size: 12px; letter-spacing: .45em; text-transform: uppercase;
-    border-bottom: 1px solid #1a1a1a;
   }
   .titelleiste .zeichen { color: var(--a); letter-spacing: 0; font-size: 14px; }
 
   /* ---------- Kopf ---------- */
-  header { text-align: center; padding: 34px 20px 8px; }
-  h1 { margin: 0; font-size: clamp(30px, 6vw, 46px); font-weight: 200; letter-spacing: .04em; }
-  .info { color: var(--grau); margin: 8px 0 18px; font-size: 15px; }
+  header { text-align: center; padding: 22px 20px 0; }
+  h1 { margin: 0; font-size: clamp(30px, 6vw, 45px); font-weight: 200; letter-spacing: .04em; }
+  .info { color: var(--grau); margin: 6px 0 16px; font-size: 15px; }
   .linie {
-    height: 2px; max-width: 560px; margin: 0 auto;
+    height: 2px; max-width: 760px; margin: 0 auto;
     background: linear-gradient(90deg, transparent, var(--a), transparent);
   }
 
+  /* ---------- Metallplatte (Lochblech) ---------- */
+  .platte {
+    position: relative; isolation: isolate;
+    margin: 20px 14px 0; border-radius: 10px;
+    border: 1px solid; border-color: rgba(255,255,255,.16) rgba(255,255,255,.07) rgba(0,0,0,.6) rgba(255,255,255,.07);
+  }
+  .platte::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 10px; opacity: .5;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='12' shape-rendering='crispEdges'%3E%3Crect x='1' y='2' width='2' height='2' fill='%23050505'/%3E%3Crect x='1' y='4' width='2' height='1' fill='%23ffffff' fill-opacity='.12'/%3E%3Crect x='4' y='8' width='2' height='2' fill='%23050505'/%3E%3Crect x='4' y='10' width='2' height='1' fill='%23ffffff' fill-opacity='.12'/%3E%3C/svg%3E")
+        0 0 / calc(6px / var(--dpr)) calc(12px / var(--dpr)),
+      linear-gradient(120deg, transparent 35%, rgba(255,255,255,.11) 50%, transparent 65%),
+      linear-gradient(135deg, #2E3036, #121315);
+  }
+
   /* ---------- Silberne ▰-Knöpfe ---------- */
-  .reiter { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 16px; padding: 26px 16px 6px; }
   .knopf {
     position: relative; display: inline-block; padding: 9px 24px;
     font-weight: 800; font-style: italic; font-size: 13px; letter-spacing: .06em;
-    text-transform: uppercase; text-decoration: none; cursor: pointer;
+    text-transform: uppercase; text-decoration: none; cursor: pointer; text-align: center;
     color: #3C3E44; border: 0; background: none; font-family: inherit;
     text-shadow: 0 1.3px 0 rgba(255,255,255,.78), 0 -0.9px 0 rgba(0,0,0,.44);
     isolation: isolate;
@@ -83,23 +111,29 @@
     border-color: var(--a); box-shadow: 0 0 10px var(--a-glow), 0 0 0 1px var(--a);
   }
   .knopf:focus-visible { outline: none; }
-  .knopf.inaktiv::before { filter: brightness(.82); }
-  .knopf[aria-disabled="true"] { cursor: default; opacity: .55; }
-  .knopf[aria-disabled="true"]:hover::before { border-color: #6a6a6a; box-shadow: none; }
 
-  /* ---------- Boxen ---------- */
-  main {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
-    padding: 24px 24px 8px;
+  /* ---------- Reiter + Linie über den aktiven Reiter ---------- */
+  .reiterbereich { position: relative; padding: 22px 16px 26px; }
+  .reiter { position: relative; z-index: 1; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 14px; }
+  .reiter .knopf { min-width: 150px; padding: 10px 24px; }
+  .reiter .knopf:not(.aktiv)::before { filter: brightness(.82); }
+  .reiterlinie { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .reiterlinie .basis { fill: none; stroke: url(#linienverlauf); stroke-width: 1.5; }
+  .reiterlinie .bogen { fill: none; stroke: var(--a); stroke-width: 2; filter: drop-shadow(0 0 4px var(--a-glow)); }
+
+  /* ---------- Seiten + Kästen ---------- */
+  .seite {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch;
+    padding: 0 16px 16px; min-height: 420px; align-content: start;
   }
-  .spalte { display: flex; flex-direction: column; gap: 18px; }
-  .spalte > .box:last-child { flex: 1; }
+  .js .seite { display: none; }
+  .js .seite.offen { display: grid; }
   .box {
     background: var(--box); border-radius: 8px; padding: 18px 20px 20px;
     border: 1px solid color-mix(in srgb, var(--a) 40%, #222);
     box-shadow: 0 0 14px var(--a-hauch);
-    scroll-margin-top: 20px;
   }
+  .box.breit { grid-column: 1 / -1; }
   .box.wichtig { border: 2px solid var(--a); }
   .box h2 {
     display: flex; align-items: center; gap: 10px; margin: 0 0 14px;
@@ -107,39 +141,63 @@
   }
   .box h2 .zeichen { color: var(--a); }
   .box h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--a), transparent); }
-  .box h3 { color: var(--a-hell); font-size: 14px; margin: 16px 0 6px; font-weight: 600; }
+  .box h3 { color: var(--weiss); font-size: 14px; margin: 16px 0 6px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
   .box h3:first-of-type { margin-top: 0; }
   .box p { margin: 0 0 10px; color: #cfcfcf; line-height: 1.55; font-size: 14.5px; }
 
   .zeile {
     display: flex; justify-content: space-between; gap: 12px;
-    padding: 5px 0; border-bottom: 1px solid #1d1d1d; font-size: 14px;
+    padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.07); font-size: 14px;
   }
   .zeile:last-of-type { border-bottom: 0; }
   .zeile span:first-child { color: var(--grau); }
   .zeile span:last-child { color: var(--weiss); text-align: right; }
+  a.zeile-link { text-decoration: none; padding: 9px 6px; border-radius: 4px; transition: background .15s; }
+  a.zeile-link:hover, a.zeile-link:focus-visible { background: rgba(255,255,255,.06); outline: none; }
+  a.zeile-link:hover span:last-child { text-shadow: 0 0 8px var(--a-glow); }
 
-  .balken { height: 8px; border-radius: 4px; background: #1e1e1e; overflow: hidden; margin: 8px 0 4px; }
+  .balken { height: 8px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; margin: 8px 0 4px; }
   .balken > div { height: 100%; background: linear-gradient(90deg, var(--a-dunkel), var(--a-hell)); }
 
-  .knopfreihe { display: flex; flex-wrap: wrap; gap: 12px 16px; margin-top: 14px; padding-left: 6px; }
+  .knopfreihe { display: flex; flex-wrap: wrap; gap: 12px 16px; margin-top: 16px; padding-left: 6px; }
 
-  .galerie { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .vorschau { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 34px 0 48px; }  /* ca. 1½ Zeilen davor, 2 Zeilen danach */
+  @media (max-width: 760px) { .vorschau { grid-template-columns: 1fr 1fr; } }
+  .vorschau a {
+    display: block; border-radius: 6px; overflow: hidden; line-height: 0;
+    border: 1px solid #2a2a2a; transition: border-color .15s, box-shadow .15s;
+  }
+  .vorschau a:hover, .vorschau a:focus-visible { border-color: var(--a); box-shadow: 0 0 10px var(--a-glow); outline: none; }
+  .vorschau img { width: 100%; height: auto; display: block; }
+
+  /* Übersicht: schmale Karten je Programm */
+  .seite.karten { grid-template-columns: repeat(3, 1fr); padding-top: 18px; }
+  .karte { display: block; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s; }
+  .karte img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid #2a2a2a; margin: 0 0 14px; }
+  .karte p { min-height: 3.1em; }
+  .karte:hover, .karte:focus-visible { border-color: var(--a); box-shadow: 0 0 14px var(--a-glow); outline: none; }
+  .karte:hover .knopf::before, .karte:focus-visible .knopf::before { border-color: var(--a); box-shadow: 0 0 10px var(--a-glow), 0 0 0 1px var(--a); }
+
+  .galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
   .kachel {
     aspect-ratio: 1; border-radius: 6px; border: 1px dashed #333;
     display: grid; place-items: center; color: #555; font-size: 22px;
-    background: linear-gradient(135deg, #161616, #0f0f0f);
+    background: rgba(0,0,0,.35);
   }
   .video {
-    aspect-ratio: 16 / 9; border-radius: 6px; border: 1px dashed #333; margin-bottom: 10px;
+    aspect-ratio: 16 / 9; border-radius: 6px; border: 1px dashed #333;
     display: grid; place-items: center; color: #666; font-size: 13px; text-align: center; padding: 10px;
-    background: linear-gradient(135deg, #161616, #0f0f0f);
+    background: rgba(0,0,0,.35);
   }
   .hinweis { color: var(--grau); font-size: 13px; font-style: italic; }
 
-  /* ---------- Fuß mit Farbwahl ---------- */
-  footer { padding: 18px 20px 24px; text-align: center; }
-  .farbwahl { display: flex; justify-content: center; gap: 10px; margin: 0 0 16px; flex-wrap: wrap; }
+  /* ---------- Untere Leiste (nicht auf der Platte) ---------- */
+  footer {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+    padding: 18px 24px 20px;
+  }
+  .fuss { color: #5c5c5c; font-size: 12.5px; }
+  .farbwahl { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
   .farbe {
     width: 26px; height: 14px; border: 0; padding: 0; cursor: pointer; background: none; position: relative;
   }
@@ -150,17 +208,23 @@
   .farbe.gewaehlt::before { border-color: #fff; box-shadow: 0 0 8px #fff; }
   .farbe:focus-visible { outline: none; }
   .farbe:focus-visible::before { border-color: #fff; }
-  .fuss { color: #5c5c5c; font-size: 12.5px; }
 
   @media (max-width: 760px) {
     body { padding: 12px 10px 24px; }
-    main { grid-template-columns: 1fr; padding: 16px 14px 4px; }
+    .platte { margin: 16px 8px 0; }
+    .seite, .seite.karten { grid-template-columns: 1fr; padding: 0 10px 12px; min-height: 0; }
+    .reiterbereich { padding: 18px 8px 22px; }
+    .reiter { gap: 10px 12px; }
+    .reiter .knopf { min-width: 0; padding: 8px 13px; font-size: 12px; letter-spacing: .03em; }
     .titelleiste { letter-spacing: .3em; }
+    footer { grid-template-columns: 1fr; text-align: center; }
+    footer .fuss { order: 2; }
   }
   @media (prefers-reduced-motion: reduce) { .fenster { animation: none; } }
 </style>
 </head>
 <body>
+<script>document.documentElement.classList.add('js');</script>
 <div class="fenster">
   <div class="innen">
 
@@ -172,69 +236,136 @@
       <div class="linie"></div>
     </header>
 
-    <nav class="reiter" aria-label="Bereiche">
-      <a class="knopf" href="#programme">Programme</a>
-      <a class="knopf" href="#spiel">Spiel</a>
-      <a class="knopf" href="#videos">Videos</a>
-      <a class="knopf" href="#grafiken">Grafiken</a>
-    </nav>
+    <div class="platte">
+      <div class="reiterbereich">
+        <svg class="reiterlinie" aria-hidden="true">
+          <defs>
+            <linearGradient id="linienverlauf" gradientUnits="userSpaceOnUse" x1="0" x2="1000" y1="0" y2="0">
+              <stop offset="0" style="stop-color:var(--a);stop-opacity:0"/>
+              <stop offset=".5" style="stop-color:var(--a);stop-opacity:1"/>
+              <stop offset="1" style="stop-color:var(--a);stop-opacity:0"/>
+            </linearGradient>
+          </defs>
+          <path class="basis"/>
+          <path class="bogen"/>
+        </svg>
+        <nav class="reiter" aria-label="Bereiche">
+          <a class="knopf" href="#uebersicht" data-seite="uebersicht">Übersicht</a>
+          <a class="knopf" href="#programme" data-seite="programme">Programme</a>
+          <a class="knopf" href="#spiel" data-seite="spiel">Spiel</a>
+          <a class="knopf" href="#videos" data-seite="videos">Videos</a>
+          <a class="knopf" href="#grafiken" data-seite="grafiken">Grafiken</a>
+        </nav>
+      </div>
 
-    <main>
-      <div class="spalte">
-        <section class="box wichtig" id="programme">
-          <h2><span class="zeichen">▰</span>Programme</h2>
-          <p>Kleine Windows-Werkzeuge, die ich für mich selbst gebaut habe – alle im gleichen dunklen Design.</p>
+      <!-- ===== ÜBERSICHT (Startseite) ===== -->
+      <section class="seite" id="seite-uebersicht" aria-label="Übersicht">
+        <div class="box wichtig">
+          <h2><span class="zeichen">▰</span>Über mich</h2>
+          <p>Hallo und willkommen in meiner Werkstatt! Ich bin Minari Trister.</p>
+          <p>In meiner Freizeit baue ich kleine Windows-Programme, arbeite an meinem eigenen Rollenspiel mit dem RPG Maker, schneide Anime-Musik-Videos und gestalte Grafiken mit Photoshop.</p>
+          <p>Hier zeige ich, woran ich gerade arbeite – fertige Programme gibt es zum Herunterladen, bei allem anderen kannst du zusehen, wie es wächst.</p>
+        </div>
+        <div class="box">
+          <h2><span class="zeichen">▰</span>Was es hier gibt</h2>
+          <a class="zeile zeile-link" href="#programme" data-ziel="programme"><span>Programme</span><span>System Status 2.0 – zum Download ›</span></a>
+          <a class="zeile zeile-link" href="#spiel" data-ziel="spiel"><span>Spiel</span><span>RPG-Maker-Spiel – in Arbeit ›</span></a>
+          <a class="zeile zeile-link" href="#videos" data-ziel="videos"><span>Videos</span><span>AMVs und Let's Plays – bald ›</span></a>
+          <a class="zeile zeile-link" href="#grafiken" data-ziel="grafiken"><span>Grafiken</span><span>Galerie – bald ›</span></a>
+          <h3 style="margin-top:22px">Neu</h3>
+          <div class="zeile"><span>20.11.2026</span><span>System Status 2.0 zum Herunterladen</span></div>
+        </div>
+      </section>
 
-          <h3>System Status</h3>
-          <p>Zeigt auf einen Blick, was im PC steckt und wie es ihm geht: Prozessor, Arbeitsspeicher, Laufwerke und mehr.</p>
-          <div class="zeile"><span>Für</span><span>Windows</span></div>
-          <div class="zeile"><span>Stand</span><span>fertig</span></div>
+      <!-- ===== PROGRAMME ===== -->
+      <section class="seite karten" id="seite-programme" aria-label="Programme">
+        <!-- Je Programm eine schmale Karte; Klick öffnet die eigene Seite des Programms -->
+        <a class="box karte" href="#system-status" data-ziel="system-status">
+          <h2><span class="zeichen">▰</span>System Status</h2>
+          <img src="bilder/system-status/01-system-info.png" alt="" width="1080" height="780">
+          <p>Zeigt, was im PC steckt und wie es ihm geht – und hilft beim Pflegen.</p>
+          <div class="zeile"><span>Version</span><span>2.0</span></div>
+          <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
+          <div class="knopfreihe"><span class="knopf">Ansehen</span></div>
+        </a>
+      </section>
 
-          <div class="knopfreihe">
-            <span class="knopf" aria-disabled="true">Download folgt</span>
+      <!-- ===== PROGRAMM: SYSTEM STATUS (gehört zum Reiter Programme) ===== -->
+      <section class="seite" id="seite-system-status" data-reiter="programme" aria-label="System Status">
+        <div class="box wichtig breit">
+          <h2><span class="zeichen">▰</span>System Status</h2>
+          <p>Zeigt auf einen Blick, was im PC steckt und wie es ihm geht – und hilft beim Pflegen: Gesundheit der Festplatten, Reinigung, Datenschutz, Treiber, Autostart und Sicherung von Lesezeichen &amp; Co.</p>
+          <div class="vorschau" title="Bild anklicken für die große Ansicht">
+            <a href="bilder/system-status/01-system-info.png" target="_blank" rel="noopener"><img src="bilder/system-status/01-system-info.png" alt="System Status – Reiter System Info" width="1080" height="780"></a>
+            <a href="bilder/system-status/02-gesundheit.png" target="_blank" rel="noopener"><img src="bilder/system-status/02-gesundheit.png" alt="System Status – Reiter Gesundheit" width="1080" height="780"></a>
+            <a href="bilder/system-status/03-reinigung.png" target="_blank" rel="noopener"><img src="bilder/system-status/03-reinigung.png" alt="System Status – Reiter Reinigung" width="1080" height="780"></a>
+            <a href="bilder/system-status/04-datenschutz.png" target="_blank" rel="noopener"><img src="bilder/system-status/04-datenschutz.png" alt="System Status – Reiter Datenschutz" width="1080" height="780"></a>
           </div>
-        </section>
+          <div class="zeile"><span>Version</span><span>2.0 (20.11.2026)</span></div>
+          <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
+          <div class="zeile"><span>Download</span><span>Zip, 110 KB – ohne Installation</span></div>
+          <div class="knopfreihe">
+            <a class="knopf" href="downloads/System-Status-2.0.zip" download="System Status 2.0.zip">Download</a>
+            <a class="knopf" href="#programme" data-ziel="programme">Zurück zur Übersicht</a>
+          </div>
+          <p class="hinweis" style="margin-top:14px">Beim ersten Start meldet Windows evtl. „Der Computer wurde durch Windows geschützt“ – dann auf „Weitere Informationen“ und „Trotzdem ausführen“. Benutzung auf eigene Verantwortung.</p>
+        </div>
+      </section>
 
-        <section class="box" id="spiel">
+      <!-- ===== SPIEL ===== -->
+      <section class="seite" id="seite-spiel" aria-label="Spiel">
+        <div class="box wichtig">
           <h2><span class="zeichen">▰</span>RPG-Maker-Spiel</h2>
           <p>Mein eigenes Rollenspiel, gebaut mit dem RPG Maker. Es geht langsam voran – hier halte ich jeden Fortschritt fest.</p>
           <div class="zeile"><span>Titel</span><span>noch geheim</span></div>
           <div class="zeile"><span>Stand</span><span>in Arbeit</span></div>
           <div class="balken" aria-hidden="true"><div style="width:15%"></div></div>
-          <h3>Entwicklungstagebuch</h3>
+        </div>
+        <div class="box">
+          <h2><span class="zeichen">▰</span>Entwicklungstagebuch</h2>
           <p class="hinweis">Der erste Eintrag folgt bald.</p>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      <div class="spalte">
-        <section class="box" id="videos">
-          <h2><span class="zeichen">▰</span>Videos</h2>
-          <h3>AMVs (Anime-Musik-Videos)</h3>
+      <!-- ===== VIDEOS ===== -->
+      <section class="seite" id="seite-videos" aria-label="Videos">
+        <div class="box">
+          <h2><span class="zeichen">▰</span>AMVs</h2>
+          <p>Anime-Musik-Videos</p>
           <div class="video">▶<br>Hier erscheint bald ein Video</div>
-          <h3>Let's Plays</h3>
+        </div>
+        <div class="box">
+          <h2><span class="zeichen">▰</span>Let's Plays</h2>
+          <p>Spiele, gespielt und kommentiert</p>
           <div class="video">▶<br>Hier erscheint bald ein Video</div>
-        </section>
+        </div>
+      </section>
 
-        <section class="box" id="grafiken">
+      <!-- ===== GRAFIKEN ===== -->
+      <section class="seite" id="seite-grafiken" aria-label="Grafiken">
+        <div class="box breit">
           <h2><span class="zeichen">▰</span>Grafiken</h2>
           <p>Bilder und Grafiken, die ich mit Photoshop gestaltet habe.</p>
           <div class="galerie">
             <div class="kachel">▰</div><div class="kachel">▰</div><div class="kachel">▰</div>
             <div class="kachel">▰</div><div class="kachel">▰</div><div class="kachel">▰</div>
           </div>
-        </section>
-      </div>
-    </main>
+        </div>
+      </section>
+    </div>
 
     <footer>
-      <div class="farbwahl" role="group" aria-label="Akzentfarbe wählen"></div>
       <div class="fuss">© 2026 Minari Trister</div>
+      <div class="farbwahl" role="group" aria-label="Akzentfarbe wählen"></div>
+      <div></div>
     </footer>
 
+    <div class="glas" aria-hidden="true"></div>
   </div>
 </div>
 
 <script>
+  /* ---------- Farbwahl ---------- */
   const farben = [
     ['Rot', '#E01010'], ['Orange', '#FF7A00'], ['Gold', '#E0B000'], ['Grün', '#1EC03C'],
     ['Türkis', '#00B4C8'], ['Blau', '#1E6BFF'], ['Lila', '#9B30FF'], ['Pink', '#FF2E9A']
@@ -248,7 +379,6 @@
     leiste.querySelectorAll('.farbe').forEach(k => k.classList.toggle('gewaehlt', k.dataset.wert === wert));
     try { localStorage.setItem('akzentfarbe', wert); } catch (e) {}
   }
-
   farben.forEach(([name, wert]) => {
     const k = document.createElement('button');
     k.className = 'farbe'; k.title = name; k.setAttribute('aria-label', name);
@@ -257,6 +387,76 @@
     leiste.appendChild(k);
   });
   setzeFarbe(farben.some(f => f[1] === gespeichert) ? gespeichert : '#E01010');
+
+  /* ---------- Lochblech an echten Bildpunkten ausrichten ---------- */
+  function setzeDpr() { document.documentElement.style.setProperty('--dpr', window.devicePixelRatio || 1); }
+  setzeDpr();
+
+  /* ---------- Reiter: jede Seite eigenständig ---------- */
+  const reiter = [...document.querySelectorAll('.reiter .knopf')];
+  const seiten = [...document.querySelectorAll('.seite')];
+  const bereich = document.querySelector('.reiterbereich');
+  const svg = document.querySelector('.reiterlinie');
+
+  function zeigeSeite(name) {
+    let seite = seiten.find(s => s.id === 'seite-' + name);
+    if (!seite) { name = 'uebersicht'; seite = seiten.find(s => s.id === 'seite-uebersicht'); }
+    seiten.forEach(s => s.classList.toggle('offen', s === seite));
+    // Unterseiten (z. B. ein Programm) gehören zu ihrem Reiter
+    const reiterName = seite.dataset.reiter || name;
+    reiter.forEach(r => {
+      const an = r.dataset.seite === reiterName;
+      r.classList.toggle('aktiv', an);
+      if (an) r.setAttribute('aria-current', 'page'); else r.removeAttribute('aria-current');
+    });
+    zeichneLinie();
+  }
+
+  /* Linie unter den Reitern: läuft waagerecht, am aktiven Reiter schräg hoch, drüber und schräg wieder runter */
+  function zeichneLinie() {
+    const aktiv = reiter.find(r => r.classList.contains('aktiv'));
+    const b = bereich.getBoundingClientRect();
+    const breite = b.width, tan = Math.tan(22 * Math.PI / 180), abstand = 5;
+    svg.setAttribute('viewBox', `0 0 ${breite} ${b.height}`);
+    svg.querySelector('#linienverlauf').setAttribute('x2', breite);
+    const basisPfad = svg.querySelector('.basis'), bogenPfad = svg.querySelector('.bogen');
+    if (!aktiv) { basisPfad.setAttribute('d', ''); bogenPfad.setAttribute('d', ''); return; }
+    const r = aktiv.getBoundingClientRect();
+    const L = r.left - b.left, R = r.right - b.left, T = r.top - b.top, B = r.bottom - b.top;
+    const mitte = (T + B) / 2, oben = T - abstand;
+    // Reiter rutschen bei kleinem Fenster in mehrere Reihen: Linie unter der letzten Reihe
+    const linieY = Math.max(...reiter.map(k => k.getBoundingClientRect().bottom - b.top)) + abstand + 4;
+    // Steht der aktive Reiter nicht in der letzten Reihe (sehr schmaler Bildschirm), nur Leuchtrand am Knopf
+    if (linieY - B > abstand + 8) { basisPfad.setAttribute('d', ''); bogenPfad.setAttribute('d', ''); return; }
+    const xl = y => L - tan * (y - mitte) - abstand;
+    const xr = y => R - tan * (y - mitte) + abstand;
+    const f = n => n.toFixed(1);
+    const bogen = `M ${f(xl(linieY))} ${f(linieY)} L ${f(xl(oben))} ${f(oben)} L ${f(xr(oben))} ${f(oben)} L ${f(xr(linieY))} ${f(linieY)}`;
+    basisPfad.setAttribute('d', `M 0 ${f(linieY)} L ${f(xl(linieY))} ${f(linieY)} M ${f(xr(linieY))} ${f(linieY)} L ${f(breite)} ${f(linieY)}`);
+    bogenPfad.setAttribute('d', bogen);
+    // Glas-Glanz beginnt unter dem Kopfbereich
+    const kopf = document.querySelector('header').getBoundingClientRect().bottom - document.querySelector('.innen').getBoundingClientRect().top;
+    document.querySelector('.innen').style.setProperty('--kopf', kopf + 'px');
+  }
+
+  reiter.forEach(r => r.addEventListener('click', e => {
+    e.preventDefault();
+    history.replaceState(null, '', '#' + r.dataset.seite);
+    zeigeSeite(r.dataset.seite);
+  }));
+  // Karten, Links und Zurück-Knopf: wie eine neue Seite (Zurück im Browser funktioniert)
+  document.querySelectorAll('[data-ziel]').forEach(k => k.addEventListener('click', e => {
+    e.preventDefault();
+    history.pushState(null, '', '#' + k.dataset.ziel);
+    zeigeSeite(k.dataset.ziel);
+    const oben = document.querySelector('.platte').getBoundingClientRect().top;
+    if (oben < 0) window.scrollBy({ top: oben - 10, behavior: 'smooth' });
+  }));
+  window.addEventListener('popstate', () => zeigeSeite(location.hash.slice(1)));
+  window.addEventListener('hashchange', () => zeigeSeite(location.hash.slice(1)));
+  window.addEventListener('resize', () => { setzeDpr(); zeichneLinie(); });
+  zeigeSeite(location.hash.slice(1));
+  if (document.fonts) document.fonts.ready.then(zeichneLinie);
 </script>
 </body>
 </html>
