@@ -6,7 +6,7 @@
 <title>Minari Trister</title>
 <meta name="description" content="Programme, Spiele, Videos und Grafiken von Minari Trister">
 <style>
-  /* Design 01 "Future 01" – Vorbild: System Status 2.0 */
+  /* Design 01 "Future 01" – Vorbild: System Status 2.1 */
   @property --winkel { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
   :root {
@@ -232,7 +232,7 @@
 
     <header>
       <h1>Minari Trister</h1>
-      <p class="info">Programme · RPG-Maker-Spiel · Videos · Grafiken</p>
+      <p class="info">Programme · Spiele · Videos · Grafiken</p>
       <div class="linie"></div>
     </header>
 
@@ -252,7 +252,7 @@
         <nav class="reiter" aria-label="Bereiche">
           <a class="knopf" href="#uebersicht" data-seite="uebersicht">Übersicht</a>
           <a class="knopf" href="#programme" data-seite="programme">Programme</a>
-          <a class="knopf" href="#spiel" data-seite="spiel">Spiel</a>
+          <a class="knopf" href="#spiele" data-seite="spiele">Spiele</a>
           <a class="knopf" href="#videos" data-seite="videos">Videos</a>
           <a class="knopf" href="#grafiken" data-seite="grafiken">Grafiken</a>
         </nav>
@@ -268,11 +268,13 @@
         </div>
         <div class="box">
           <h2><span class="zeichen">▰</span>Was es hier gibt</h2>
-          <a class="zeile zeile-link" href="#programme" data-ziel="programme"><span>Programme</span><span>System Status 2.0 – zum Download ›</span></a>
-          <a class="zeile zeile-link" href="#spiel" data-ziel="spiel"><span>Spiel</span><span>RPG-Maker-Spiel – in Arbeit ›</span></a>
+          <a class="zeile zeile-link" href="#programme" data-ziel="programme"><span>Programme</span><span>System Status 2.1 – zum Download ›</span></a>
+          <a class="zeile zeile-link" href="#spiele" data-ziel="spiele"><span>Spiele</span><span>Planeten Crash 1.0 – zum Download ›</span></a>
           <a class="zeile zeile-link" href="#videos" data-ziel="videos"><span>Videos</span><span>AMVs und Let's Plays – bald ›</span></a>
           <a class="zeile zeile-link" href="#grafiken" data-ziel="grafiken"><span>Grafiken</span><span>Galerie – bald ›</span></a>
           <h3 style="margin-top:22px">Neu</h3>
+          <div class="zeile"><span>21.11.2026</span><span>Planeten Crash 1.0 zum Herunterladen</span></div>
+          <div class="zeile"><span>21.11.2026</span><span>System Status 2.1 – schnellerer Start, mehr Browser</span></div>
           <div class="zeile"><span>20.11.2026</span><span>System Status 2.0 zum Herunterladen</span></div>
         </div>
       </section>
@@ -284,7 +286,7 @@
           <h2><span class="zeichen">▰</span>System Status</h2>
           <img src="bilder/system-status/01-system-info.png" alt="" width="1080" height="780">
           <p>Zeigt, was im PC steckt und wie es ihm geht – und hilft beim Pflegen.</p>
-          <div class="zeile"><span>Version</span><span>2.0</span></div>
+          <div class="zeile"><span>Version</span><span>2.1</span></div>
           <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
           <div class="knopfreihe"><span class="knopf">Ansehen</span></div>
         </a>
@@ -301,25 +303,77 @@
             <a href="bilder/system-status/03-reinigung.png" target="_blank" rel="noopener"><img src="bilder/system-status/03-reinigung.png" alt="System Status – Reiter Reinigung" width="1080" height="780"></a>
             <a href="bilder/system-status/04-datenschutz.png" target="_blank" rel="noopener"><img src="bilder/system-status/04-datenschutz.png" alt="System Status – Reiter Datenschutz" width="1080" height="780"></a>
           </div>
-          <div class="zeile"><span>Version</span><span>2.0 (20.11.2026)</span></div>
+          <h3>Neu in Version 2.1</h3>
+          <p>Reinigung und Sicherung erkennen jetzt auch weniger bekannte Browser (z. B. Opera, Waterfox, LibreWolf, Thorium). Außerdem startet das Programm schneller: Das Fenster bleibt beim Laden bedienbar, und ein Ladekreis zeigt, dass gearbeitet wird.</p>
+          <div class="zeile"><span>Version</span><span>2.1 (21.11.2026)</span></div>
           <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
-          <div class="zeile"><span>Download</span><span>Zip, 110 KB – ohne Installation</span></div>
+          <div class="zeile"><span>Download</span><span>Zip, 114 KB – ohne Installation</span></div>
           <div class="knopfreihe">
-            <a class="knopf" href="downloads/System-Status-2.0.zip" download="System Status 2.0.zip">Download</a>
+            <a class="knopf" href="downloads/System-Status-2.1.zip" download="System Status 2.1.zip">Download</a>
             <a class="knopf" href="#programme" data-ziel="programme">Zurück zur Übersicht</a>
           </div>
           <p class="hinweis" style="margin-top:14px">Beim ersten Start meldet Windows evtl. „Der Computer wurde durch Windows geschützt“ – dann auf „Weitere Informationen“ und „Trotzdem ausführen“. Benutzung auf eigene Verantwortung.</p>
         </div>
       </section>
 
-      <!-- ===== SPIEL ===== -->
-      <section class="seite" id="seite-spiel" aria-label="Spiel">
+      <!-- ===== SPIELE ===== -->
+      <section class="seite karten" id="seite-spiele" aria-label="Spiele">
+        <!-- Je Spiel eine schmale Karte; Klick öffnet die eigene Seite des Spiels -->
+        <a class="box karte" href="#planeten-crash" data-ziel="planeten-crash">
+          <h2><span class="zeichen">▰</span>Planeten Crash</h2>
+          <img src="bilder/planeten-crash/01-titel.jpg" alt="" width="1280" height="720">
+          <p>Drei gewinnt mit Planeten – mit Sondersteinen, Ketten und einem Schwarzen Loch.</p>
+          <div class="zeile"><span>Version</span><span>1.0</span></div>
+          <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
+          <div class="knopfreihe"><span class="knopf">Ansehen</span></div>
+        </a>
+        <a class="box karte" href="#rpg-maker-spiel" data-ziel="rpg-maker-spiel">
+          <h2><span class="zeichen">▰</span>RPG-Maker-Spiel</h2>
+          <div class="video" style="margin:0 0 14px">▰<br>Bilder folgen</div>
+          <p>Mein eigenes Rollenspiel, gebaut mit dem RPG Maker – noch in Arbeit.</p>
+          <div class="zeile"><span>Stand</span><span>in Arbeit</span></div>
+          <div class="zeile"><span>Titel</span><span>noch geheim</span></div>
+          <div class="knopfreihe"><span class="knopf">Ansehen</span></div>
+        </a>
+      </section>
+
+      <!-- ===== SPIEL: PLANETEN CRASH (gehört zum Reiter Spiele) ===== -->
+      <section class="seite" id="seite-planeten-crash" data-reiter="spiele" aria-label="Planeten Crash">
+        <div class="box wichtig breit">
+          <h2><span class="zeichen">▰</span>Planeten Crash</h2>
+          <p>Ein Drei-gewinnt-Spiel mit Planeten: Tausche zwei Steine, damit drei oder mehr gleiche in einer Reihe stehen. Aus vier, fünf oder sechs gleichen entstehen Sondersteine – Sterne, Sonnen, Blitze und sogar ein Schwarzes Loch.</p>
+          <div class="vorschau" title="Bild anklicken für die große Ansicht">
+            <a href="bilder/planeten-crash/01-titel.jpg" target="_blank" rel="noopener"><img src="bilder/planeten-crash/01-titel.jpg" alt="Planeten Crash – Titelbild" width="1280" height="720"></a>
+            <a href="bilder/planeten-crash/02-spielarten.jpg" target="_blank" rel="noopener"><img src="bilder/planeten-crash/02-spielarten.jpg" alt="Planeten Crash – Auswahl der Spielarten" width="1280" height="720"></a>
+            <a href="bilder/planeten-crash/03-entspannung.jpg" target="_blank" rel="noopener"><img src="bilder/planeten-crash/03-entspannung.jpg" alt="Planeten Crash – Spielart Entspannung" width="1280" height="720"></a>
+            <a href="bilder/planeten-crash/04-schatzsuche.jpg" target="_blank" rel="noopener"><img src="bilder/planeten-crash/04-schatzsuche.jpg" alt="Planeten Crash – Spielart Schatzsuche" width="1280" height="720"></a>
+          </div>
+          <h3>Spielart</h3>
+          <p>Drei gewinnt</p>
+          <h3 style="margin-top:22px">Steuerung</h3>
+          <p>Nur mit der Maus: Stein auf den Nachbarn ziehen – oder erst den einen, dann den anderen Stein anklicken. Der Spielstand wird automatisch gespeichert.</p>
+          <div class="zeile" style="margin-top:14px"><span>Version – Testversion, Entwicklungs-Stadium</span><span>1.0 (18.11.2026)</span></div>
+          <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
+          <div class="zeile"><span>Download</span><span>Zip, 73 MB – ohne Installation</span></div>
+          <div class="zeile"><span>Musik</span><span>von Pixabay</span></div>
+          <div class="zeile" style="margin-top:1.6em"><span>Wie oft gedownloadet</span><span id="pc-zaehler">–</span></div>
+          <div class="knopfreihe">
+            <a class="knopf" href="https://github.com/MinariTrister/minaritrister.github.io/releases/download/planeten-crash-1.0/Planeten-Crash-1.0.zip">Download</a>
+            <a class="knopf" href="#spiele" data-ziel="spiele">Zurück zur Übersicht</a>
+          </div>
+          <p class="hinweis" style="margin-top:14px">Zip entpacken und „Planeten Crash.exe“ starten – der Ordner „Daten“ muss daneben liegen bleiben. Beim ersten Start meldet Windows evtl. „Der Computer wurde durch Windows geschützt“ – dann auf „Weitere Informationen“ und „Trotzdem ausführen“.</p>
+        </div>
+      </section>
+
+      <!-- ===== SPIEL: RPG-MAKER-SPIEL (gehört zum Reiter Spiele) ===== -->
+      <section class="seite" id="seite-rpg-maker-spiel" data-reiter="spiele" aria-label="RPG-Maker-Spiel">
         <div class="box wichtig">
           <h2><span class="zeichen">▰</span>RPG-Maker-Spiel</h2>
           <p>Mein eigenes Rollenspiel, gebaut mit dem RPG Maker. Es geht langsam voran – hier halte ich jeden Fortschritt fest.</p>
           <div class="zeile"><span>Titel</span><span>noch geheim</span></div>
           <div class="zeile"><span>Stand</span><span>in Arbeit</span></div>
           <div class="balken" aria-hidden="true"><div style="width:15%"></div></div>
+          <div class="knopfreihe"><a class="knopf" href="#spiele" data-ziel="spiele">Zurück zur Übersicht</a></div>
         </div>
         <div class="box">
           <h2><span class="zeichen">▰</span>Entwicklungstagebuch</h2>
@@ -399,6 +453,7 @@
   const svg = document.querySelector('.reiterlinie');
 
   function zeigeSeite(name) {
+    if (name === 'spiel') name = 'spiele';   // alte Adresse #spiel
     let seite = seiten.find(s => s.id === 'seite-' + name);
     if (!seite) { name = 'uebersicht'; seite = seiten.find(s => s.id === 'seite-uebersicht'); }
     seiten.forEach(s => s.classList.toggle('offen', s === seite));
@@ -456,6 +511,16 @@
   window.addEventListener('hashchange', () => zeigeSeite(location.hash.slice(1)));
   window.addEventListener('resize', () => { setzeDpr(); zeichneLinie(); });
   zeigeSeite(location.hash.slice(1));
+
+  /* ---------- Download-Zähler: GitHub zählt die Downloads auf der Seite "Releases" ---------- */
+  fetch('https://api.github.com/repos/MinariTrister/minaritrister.github.io/releases/tags/planeten-crash-1.0')
+    .then(a => a.ok ? a.json() : null)
+    .then(d => {
+      if (!d || !d.assets) return;
+      const n = d.assets.reduce((s, x) => s + (x.download_count || 0), 0);
+      document.getElementById('pc-zaehler').textContent = n.toLocaleString('de-DE');
+    })
+    .catch(() => {});
   if (document.fonts) document.fonts.ready.then(zeichneLinie);
 </script>
 </body>
