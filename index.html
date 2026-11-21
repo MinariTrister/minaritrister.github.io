@@ -308,8 +308,9 @@
           <div class="zeile"><span>Version</span><span>2.1 (21.11.2026)</span></div>
           <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
           <div class="zeile"><span>Download</span><span>Zip, 114 KB – ohne Installation</span></div>
+          <div class="zeile" style="margin-top:1.6em"><span>Wie oft gedownloadet</span><span data-release="system-status-2.1">–</span></div>
           <div class="knopfreihe">
-            <a class="knopf" href="downloads/System-Status-2.1.zip" download="System Status 2.1.zip">Download</a>
+            <a class="knopf" href="https://github.com/MinariTrister/minaritrister.github.io/releases/download/system-status-2.1/System.Status.2.1.zip">Download</a>
             <a class="knopf" href="#programme" data-ziel="programme">Zurück zur Übersicht</a>
           </div>
           <p class="hinweis" style="margin-top:14px">Beim ersten Start meldet Windows evtl. „Der Computer wurde durch Windows geschützt“ – dann auf „Weitere Informationen“ und „Trotzdem ausführen“. Benutzung auf eigene Verantwortung.</p>
@@ -356,7 +357,7 @@
           <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
           <div class="zeile"><span>Download</span><span>Zip, 73 MB – ohne Installation</span></div>
           <div class="zeile"><span>Musik</span><span>von Pixabay</span></div>
-          <div class="zeile" style="margin-top:1.6em"><span>Wie oft gedownloadet</span><span id="pc-zaehler">–</span></div>
+          <div class="zeile" style="margin-top:1.6em"><span>Wie oft gedownloadet</span><span data-release="planeten-crash-1.0">–</span></div>
           <div class="knopfreihe">
             <a class="knopf" href="https://github.com/MinariTrister/minaritrister.github.io/releases/download/planeten-crash-1.0/Planeten.Crash.1.0.zip">Download</a>
             <a class="knopf" href="#spiele" data-ziel="spiele">Zurück zur Übersicht</a>
@@ -512,15 +513,18 @@
   window.addEventListener('resize', () => { setzeDpr(); zeichneLinie(); });
   zeigeSeite(location.hash.slice(1));
 
-  /* ---------- Download-Zähler: GitHub zählt die Downloads auf der Seite "Releases" ---------- */
-  fetch('https://api.github.com/repos/MinariTrister/minaritrister.github.io/releases/tags/planeten-crash-1.0')
-    .then(a => a.ok ? a.json() : null)
-    .then(d => {
-      if (!d || !d.assets) return;
-      const n = d.assets.reduce((s, x) => s + (x.download_count || 0), 0);
-      document.getElementById('pc-zaehler').textContent = n.toLocaleString('de-DE');
-    })
-    .catch(() => {});
+  /* ---------- Download-Zähler: GitHub zählt die Downloads auf der Seite "Releases" ----------
+     Jeder Download liegt als GitHub-Release; <span data-release="Markierung"> zeigt die Anzahl. */
+  document.querySelectorAll('[data-release]').forEach(feld => {
+    fetch('https://api.github.com/repos/MinariTrister/minaritrister.github.io/releases/tags/' + feld.dataset.release)
+      .then(a => a.ok ? a.json() : null)
+      .then(d => {
+        if (!d || !d.assets) return;
+        const n = d.assets.reduce((s, x) => s + (x.download_count || 0), 0);
+        feld.textContent = n.toLocaleString('de-DE');
+      })
+      .catch(() => {});
+  });
   if (document.fonts) document.fonts.ready.then(zeichneLinie);
 </script>
 </body>
