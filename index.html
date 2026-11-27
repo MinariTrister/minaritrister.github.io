@@ -177,8 +177,11 @@
   /* Übersicht: schmale Karten je Programm */
   .seite.karten { grid-template-columns: repeat(3, 1fr); padding-top: 18px; }
   .karte { display: block; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s; }
-  .karte img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid #2a2a2a; margin: 0 0 14px; }
-  .karte p { min-height: 3.1em; }
+  /* Alle Kartenbilder gleich hoch (16:10), ganzes Bild sichtbar, Rest schwarz - so liegen Beschreibungen auf einer Höhe */
+  .karte img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: contain; background: #000;
+               border-radius: 6px; border: 1px solid #2a2a2a; margin: 0 0 14px; }
+  .karte .video { aspect-ratio: 16 / 10; padding: 0; }
+  .karte p { min-height: 4.65em; }   /* Platz für 3 Zeilen, damit Version/Für darunter auf einer Höhe liegen */
   .karte.bald { opacity: .7; }   /* Platzhalter: kein Link, leuchtet nicht */
   .karte.bald:hover { border-color: color-mix(in srgb, var(--a) 40%, #222); box-shadow: 0 0 14px var(--a-hauch); }
   .karte:hover, .karte:focus-visible { border-color: var(--a); box-shadow: 0 0 14px var(--a-glow); outline: none; }
@@ -227,7 +230,7 @@
     display: grid; place-items: center; color: #666; font-size: 13px; text-align: center; padding: 10px;
     background: rgba(0,0,0,.35);
   }
-  .youtube { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 6px; background: #000; }
+  .youtube { display: block; width: 100%; max-width: 720px; margin: 0 auto; aspect-ratio: 16 / 9; border: 0; border-radius: 6px; background: #000; }
   .hinweis { color: var(--grau); font-size: 13px; font-style: italic; }
 
   /* ---------- Untere Leiste (nicht auf der Platte) ---------- */
@@ -302,14 +305,14 @@
         <div class="box wichtig">
           <h2><span class="zeichen">▰</span>Über mich</h2>
           <p>Hallo und willkommen in meiner Werkstatt! Ich bin Minari Trister.</p>
-          <p>In meiner Freizeit baue ich kleine Windows-Programme, arbeite an meinem eigenen Rollenspiel mit dem RPG Maker, schneide Anime-Musik-Videos und gestalte Grafiken mit Photoshop.</p>
+          <p>In meiner Freizeit baue ich kleine Windows-Programme, arbeite an meinem eigenen Rollenspiel mit dem RPG Maker, nehme Let's Plays auf und gestalte Grafiken mit Photoshop.</p>
           <p>Hier zeige ich, woran ich gerade arbeite – fertige Programme gibt es zum Herunterladen, bei allem anderen kannst du zusehen, wie es wächst.</p>
         </div>
         <div class="box">
           <h2><span class="zeichen">▰</span>Was es hier gibt</h2>
           <a class="zeile zeile-link" href="#programme" data-ziel="programme"><span>Programme</span><span>System Status 3.0 und MT Media Player 1.1 – zum Download ›</span></a>
           <a class="zeile zeile-link" href="#spiele" data-ziel="spiele"><span>Spiele</span><span>Planeten Crash 1.0 – zum Download ›</span></a>
-          <a class="zeile zeile-link" href="#videos" data-ziel="videos"><span>Videos</span><span>AMVs und Let's Plays – bald ›</span></a>
+          <a class="zeile zeile-link" href="#videos" data-ziel="videos"><span>Videos</span><span>Let's Plays – Sword Art Online Fatal Bullet ›</span></a>
           <a class="zeile zeile-link" href="#grafiken" data-ziel="grafiken"><span>Grafiken</span><span>Signaturen – weitere folgen ›</span></a>
           <h3 style="margin-top:22px">Neu</h3>
           <div class="zeile"><span>27.11.2026</span><span>Grafiken – Galerie mit meinen Signaturen</span></div>
@@ -462,12 +465,8 @@
 
       <!-- ===== VIDEOS ===== -->
       <section class="seite" id="seite-videos" aria-label="Videos">
-        <div class="box">
-          <h2><span class="zeichen">▰</span>AMVs</h2>
-          <p>Anime-Musik-Videos</p>
-          <div class="video">▶<br>Hier erscheint bald ein Video</div>
-        </div>
-        <div class="box">
+        <!-- AMVs am 27.11.2026 auf Wunsch entfernt (Musik- und Bildrechte) -->
+        <div class="box breit">
           <h2><span class="zeichen">▰</span>Let's Plays</h2>
           <p>Spiele, gespielt und kommentiert</p>
           <!-- Vorerst Folge 01 der Fatal-Bullet-Playlist; später das Video "Tipps und Tricks" (1nYAK9lX_uY), sobald die Musik-Sperre weg ist -->
