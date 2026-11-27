@@ -69,7 +69,11 @@
 
   /* ---------- Kopf ---------- */
   header { text-align: center; padding: 22px 20px 0; }
-  h1 { margin: 0; font-size: clamp(30px, 6vw, 45px); font-weight: 200; letter-spacing: .04em; }
+  h1 { margin: 0; font-size: clamp(30px, 6vw, 45px); font-weight: 200; letter-spacing: .04em;
+       position: relative; }
+  /* Symbol nimmt keinen Platz ein (Titel bleibt mittig); waagerechte Lage setzt das Skript */
+  h1 .symbol { position: absolute; top: 50%; left: 0; height: 1.6em; width: auto; transform: translateY(-50%); }
+  .js h1 .symbol { visibility: hidden; }   /* bis das Skript es unter die Lücke der Titelzeile gerückt hat */
   .info { color: var(--grau); margin: 6px 0 16px; font-size: 15px; }
   .linie {
     height: 2px; max-width: 760px; margin: 0 auto;
@@ -228,10 +232,10 @@
 <div class="fenster">
   <div class="innen">
 
-    <div class="titelleiste"><span class="zeichen">▰</span>M I N A R I &nbsp; T R I S T E R</div>
+    <div class="titelleiste"><span class="zeichen">▰</span><span><span id="tl-minari">M I N A R I</span> &nbsp; <span id="tl-trister">T R I S T E R</span></span></div>
 
     <header>
-      <h1>Minari Trister</h1>
+      <h1><img class="symbol" src="bilder/symbol-mt.png" alt="" width="256" height="256">Minari Trister</h1>
       <p class="info">Programme · Spiele · Videos · Grafiken</p>
       <div class="linie"></div>
     </header>
@@ -295,7 +299,7 @@
         </a>
         <a class="box karte" href="#mt-media-player" data-ziel="mt-media-player">
           <h2><span class="zeichen">▰</span>MT Media Player</h2>
-          <div class="video" style="margin:0 0 14px">▰<br>Bilder folgen</div>
+          <img src="bilder/mt-media-player/02-synchro-warp.png" alt="" width="1120" height="720">
           <p>Spielt Videos und Musik ab – mit Wiedergabeliste, Ton-Effekten und eigenem Bild zur Musik.</p>
           <div class="zeile"><span>Version</span><span>1.1</span></div>
           <div class="zeile"><span>Für</span><span>Windows 10 / 11</span></div>
@@ -337,6 +341,10 @@
         <div class="box wichtig breit">
           <h2><span class="zeichen">▰</span>MT Media Player</h2>
           <p>Mein eigener Video- und Musik-Player – schlicht zu bedienen und im gleichen Design wie meine anderen Programme. Er spielt fast alle Video- und Musikdateien ab, auch direkt aus ZIP- und RAR-Archiven, ohne sie zu entpacken.</p>
+          <div class="vorschau" title="Bild anklicken für die große Ansicht">
+            <a href="bilder/mt-media-player/01-synchrogazer.png" target="_blank" rel="noopener"><img src="bilder/mt-media-player/01-synchrogazer.png" alt="MT Media Player – Musikeffekt Synchrogazer 1.0" width="1120" height="720"></a>
+            <a href="bilder/mt-media-player/02-synchro-warp.png" target="_blank" rel="noopener"><img src="bilder/mt-media-player/02-synchro-warp.png" alt="MT Media Player – Musikeffekt Synchro - Warp" width="1120" height="720"></a>
+          </div>
           <h3>Was er kann</h3>
           <p>Wiedergabeliste (speichern und laden), am Ende automatisch die nächste Folge, „Weiter bei …“ nach dem Schließen, Vollbild mit verschiebbarer Steuerleiste, Ton-Effekte (Equalizer, Raumklang, Kompressor), eigenes bewegtes Bild zur Musik, Untertitel und Bildschirmfotos. Unten lässt sich die Farbe des Programms wählen.</p>
           <div class="zeile"><span>Version</span><span>1.1 (26.11.2026)</span></div>
@@ -427,6 +435,9 @@
           <h2><span class="zeichen">▰</span>Let's Plays</h2>
           <p>Spiele, gespielt und kommentiert</p>
           <div class="video">▶<br>Hier erscheint bald ein Video</div>
+          <div class="knopfreihe">
+            <a class="knopf" href="https://www.youtube.com/@depridog4468/featured" target="_blank" rel="noopener">Zum YouTube-Kanal</a>
+          </div>
         </div>
       </section>
 
@@ -544,8 +555,24 @@
   }));
   window.addEventListener('popstate', () => zeigeSeite(location.hash.slice(1)));
   window.addEventListener('hashchange', () => zeigeSeite(location.hash.slice(1)));
-  window.addEventListener('resize', () => { setzeDpr(); zeichneLinie(); });
+  window.addEventListener('resize', () => { setzeDpr(); zeichneLinie(); setzeSymbol(); });
   zeigeSeite(location.hash.slice(1));
+
+  /* Symbol links neben dem Titel: waagerecht so verschoben, dass die blaue Kugel (Mitte des Symbols)
+     genau unter der Lücke zwischen „M I N A R I“ und „T R I S T E R“ der Titelzeile steht; Höhe bleibt. */
+  function setzeSymbol() {
+    const sym = document.querySelector('h1 .symbol');
+    const a = document.getElementById('tl-minari'), b = document.getElementById('tl-trister');
+    if (!sym || !a || !b) return;
+    const sperr = parseFloat(getComputedStyle(a).letterSpacing) || 0;   // Sperrung hinter dem letzten I abziehen
+    const luecke = ((a.getBoundingClientRect().right - sperr) + b.getBoundingClientRect().left) / 2;
+    const h1 = sym.parentElement.getBoundingClientRect();
+    sym.style.left = (luecke - h1.left - sym.getBoundingClientRect().width / 2) + 'px';
+    sym.style.visibility = 'visible';
+  }
+  setzeSymbol();
+  if (document.fonts) document.fonts.ready.then(setzeSymbol);
+  window.addEventListener('load', setzeSymbol);
 
   /* ---------- Download-Zähler: GitHub zählt die Downloads auf der Seite "Releases" ----------
      Jeder Download liegt als GitHub-Release; <span data-release="Markierung"> zeigt die Anzahl. */
