@@ -179,9 +179,43 @@
   .karte { display: block; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s; }
   .karte img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid #2a2a2a; margin: 0 0 14px; }
   .karte p { min-height: 3.1em; }
+  .karte.bald { opacity: .7; }   /* Platzhalter: kein Link, leuchtet nicht */
+  .karte.bald:hover { border-color: color-mix(in srgb, var(--a) 40%, #222); box-shadow: 0 0 14px var(--a-hauch); }
   .karte:hover, .karte:focus-visible { border-color: var(--a); box-shadow: 0 0 14px var(--a-glow); outline: none; }
   .karte:hover .knopf::before, .karte:focus-visible .knopf::before { border-color: var(--a); box-shadow: 0 0 10px var(--a-glow), 0 0 0 1px var(--a); }
 
+  /* Grafiken: Signaturen (je Motiv eine Kachel, mehrere Fassungen per Klick) */
+  .signaturen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; }
+  @media (max-width: 980px) { .signaturen { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .signaturen { grid-template-columns: 1fr; } }
+  .sig {
+    position: relative; display: block; text-decoration: none; color: inherit;
+    border-radius: 6px; border: 1px solid #2a2a2a; overflow: hidden; background: rgba(0,0,0,.35);
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .sig:hover, .sig:focus-visible { border-color: var(--a); box-shadow: 0 0 10px var(--a-glow); outline: none; }
+  .sig img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 1; object-fit: contain; background: #000; }
+  .sig-name { display: block; padding: 7px 10px; font-size: 13px; color: #ddd; }
+  .sig-zahl {
+    position: absolute; top: 6px; right: 6px; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 700; color: #fff; background: rgba(0,0,0,.7); border: 1px solid var(--a);
+  }
+  .fassungen {
+    position: fixed; inset: 0; z-index: 50; display: none; place-items: center;
+    background: rgba(0,0,0,.82); padding: 20px;
+  }
+  .fassungen.offen { display: grid; }
+  .fassungen-box {
+    position: relative; width: min(1100px, 100%); max-height: 90vh; overflow: auto;
+    background: #0e0e0e; border: 2px solid var(--a); border-radius: 10px; box-shadow: 0 0 24px var(--a-glow);
+    padding: 18px 20px 22px;
+  }
+  .fassungen-box h2 { margin: 0 40px 14px 0; font-size: 15px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .fassungen-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .fassungen-liste figure { margin: 0; }
+  .fassungen-liste img { display: block; max-width: 100%; height: auto; margin: 0 auto; border-radius: 4px; }
+  .fassungen-liste figcaption { text-align: center; color: var(--grau); font-size: 12px; margin-top: 4px; }
+  .fassungen-zu { position: absolute; top: 12px; right: 14px; padding: 5px 14px; }
   .galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
   .kachel {
     aspect-ratio: 1; border-radius: 6px; border: 1px dashed #333;
@@ -276,8 +310,9 @@
           <a class="zeile zeile-link" href="#programme" data-ziel="programme"><span>Programme</span><span>System Status 3.0 und MT Media Player 1.1 – zum Download ›</span></a>
           <a class="zeile zeile-link" href="#spiele" data-ziel="spiele"><span>Spiele</span><span>Planeten Crash 1.0 – zum Download ›</span></a>
           <a class="zeile zeile-link" href="#videos" data-ziel="videos"><span>Videos</span><span>AMVs und Let's Plays – bald ›</span></a>
-          <a class="zeile zeile-link" href="#grafiken" data-ziel="grafiken"><span>Grafiken</span><span>Galerie – bald ›</span></a>
+          <a class="zeile zeile-link" href="#grafiken" data-ziel="grafiken"><span>Grafiken</span><span>Signaturen – weitere folgen ›</span></a>
           <h3 style="margin-top:22px">Neu</h3>
+          <div class="zeile"><span>27.11.2026</span><span>Grafiken – Galerie mit meinen Signaturen</span></div>
           <div class="zeile"><span>27.11.2026</span><span>MT Media Player 1.1 – mein eigener Video- und Musik-Player</span></div>
           <div class="zeile"><span>27.11.2026</span><span>System Status 3.0 – später Autostart, neues Listen-Design</span></div>
           <div class="zeile"><span>21.11.2026</span><span>System Status 2.1.1 – Lesezeichen-Erkennung repariert</span></div>
@@ -444,14 +479,83 @@
       </section>
 
       <!-- ===== GRAFIKEN ===== -->
-      <section class="seite" id="seite-grafiken" aria-label="Grafiken">
+      <section class="seite karten" id="seite-grafiken" aria-label="Grafiken">
+        <!-- Je Bildart eine schmale Karte; Klick öffnet die eigene Seite. Neue Bildarten einfach als weitere Karte ergänzen. -->
+        <a class="box karte" href="#signaturen" data-ziel="signaturen">
+          <h2><span class="zeichen">▰</span>Signaturen</h2>
+          <img src="bilder/signaturen/byakko-8.png" alt="" width="500" height="200">
+          <p>Banner für Foren – viele aus meiner Übungszeit als „Ami“.</p>
+          <div class="zeile"><span>Bilder</span><span>82 in 45 Motiven</span></div>
+          <div class="knopfreihe"><span class="knopf">Ansehen</span></div>
+        </a>
+        <div class="box karte bald">
+          <h2><span class="zeichen">▰</span>Wallpaper</h2>
+          <div class="video" style="margin:0 0 14px">▰<br>Bilder folgen</div>
+          <p>Hintergrundbilder für den Bildschirm.</p>
+          <div class="zeile"><span>Stand</span><span>bald</span></div>
+        </div>
+        <div class="box karte bald">
+          <h2><span class="zeichen">▰</span>Icons</h2>
+          <div class="video" style="margin:0 0 14px">▰<br>Bilder folgen</div>
+          <p>Symbole, z. B. für meine Programme.</p>
+          <div class="zeile"><span>Stand</span><span>bald</span></div>
+        </div>
+      </section>
+
+      <!-- ===== GRAFIKEN: SIGNATUREN (gehört zum Reiter Grafiken) ===== -->
+      <section class="seite" id="seite-signaturen" data-reiter="grafiken" aria-label="Signaturen">
         <div class="box breit">
-          <h2><span class="zeichen">▰</span>Grafiken</h2>
-          <p>Bilder und Grafiken, die ich mit Photoshop gestaltet habe.</p>
-          <div class="galerie">
-            <div class="kachel">▰</div><div class="kachel">▰</div><div class="kachel">▰</div>
-            <div class="kachel">▰</div><div class="kachel">▰</div><div class="kachel">▰</div>
+          <h2><span class="zeichen">▰</span>Signaturen</h2>
+          <div class="knopfreihe" style="margin:0 0 14px"><a class="knopf" href="#grafiken" data-ziel="grafiken">Zurück zur Übersicht</a></div>
+          <p class="hinweis">Banner für Foren – viele davon aus meiner Übungszeit, als ich noch „Ami“ hieß. Bei Kacheln mit mehreren Fassungen zeigt ein Klick alle Fassungen.</p>
+          <div class="signaturen">
+            <a class="sig" href="bilder/signaturen/akemi-homura.png" target="_blank" rel="noopener" data-titel="Akemi Homura" data-fassungen="akemi-homura.png"><img src="bilder/signaturen/akemi-homura.png" alt="Akemi Homura" width="450" height="150" loading="lazy"><span class="sig-name">Akemi Homura</span></a>
+            <a class="sig" href="bilder/signaturen/alone-in-the-rain-2.png" target="_blank" rel="noopener" data-titel="Alone in the Rain" data-fassungen="alone-in-the-rain-1.png|alone-in-the-rain-2.png"><img src="bilder/signaturen/alone-in-the-rain-2.png" alt="Alone in the Rain" width="450" height="160" loading="lazy"><span class="sig-name">Alone in the Rain</span><span class="sig-zahl">2 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/girl-in-rain.png" target="_blank" rel="noopener" data-titel="Girl in Rain" data-fassungen="girl-in-rain.png"><img src="bilder/signaturen/girl-in-rain.png" alt="Girl in Rain" width="450" height="150" loading="lazy"><span class="sig-name">Girl in Rain</span></a>
+            <a class="sig" href="bilder/signaturen/angel.png" target="_blank" rel="noopener" data-titel="Angel" data-fassungen="angel.png"><img src="bilder/signaturen/angel.png" alt="Angel" width="450" height="150" loading="lazy"><span class="sig-name">Angel</span></a>
+            <a class="sig" href="bilder/signaturen/gefangener-engel.png" target="_blank" rel="noopener" data-titel="Gefangener Engel" data-fassungen="gefangener-engel.png"><img src="bilder/signaturen/gefangener-engel.png" alt="Gefangener Engel" width="450" height="150" loading="lazy"><span class="sig-name">Gefangener Engel</span></a>
+            <a class="sig" href="bilder/signaturen/asia-argento-3.png" target="_blank" rel="noopener" data-titel="Asia Argento" data-fassungen="asia-argento-1.png|asia-argento-2.png|asia-argento-3.png"><img src="bilder/signaturen/asia-argento-3.png" alt="Asia Argento" width="450" height="150" loading="lazy"><span class="sig-name">Asia Argento</span><span class="sig-zahl">3 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/asuna-the-lightning.png" target="_blank" rel="noopener" data-titel="Asuna the Lightning" data-fassungen="asuna-the-lightning.png"><img src="bilder/signaturen/asuna-the-lightning.png" alt="Asuna the Lightning" width="600" height="200" loading="lazy"><span class="sig-name">Asuna the Lightning</span></a>
+            <a class="sig" href="bilder/signaturen/asuna-2.png" target="_blank" rel="noopener" data-titel="Asuna" data-fassungen="asuna-1.png|asuna-2.png"><img src="bilder/signaturen/asuna-2.png" alt="Asuna" width="450" height="170" loading="lazy"><span class="sig-name">Asuna</span><span class="sig-zahl">2 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/byakko-8.png" target="_blank" rel="noopener" data-titel="Byakko" data-fassungen="byakko-1.png|byakko-2.png|byakko-3.png|byakko-4.png|byakko-5.png|byakko-6.png|byakko-7.png|byakko-8.png"><img src="bilder/signaturen/byakko-8.png" alt="Byakko" width="500" height="200" loading="lazy"><span class="sig-name">Byakko</span><span class="sig-zahl">8 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/code-geass-lelouch.png" target="_blank" rel="noopener" data-titel="Code Geass – Lelouch" data-fassungen="code-geass-lelouch.png"><img src="bilder/signaturen/code-geass-lelouch.png" alt="Code Geass – Lelouch" width="450" height="160" loading="lazy"><span class="sig-name">Code Geass – Lelouch</span></a>
+            <a class="sig" href="bilder/signaturen/death-note-kira.png" target="_blank" rel="noopener" data-titel="Death Note – Kira" data-fassungen="death-note-kira.png"><img src="bilder/signaturen/death-note-kira.png" alt="Death Note – Kira" width="600" height="200" loading="lazy"><span class="sig-name">Death Note – Kira</span></a>
+            <a class="sig" href="bilder/signaturen/fantasia.png" target="_blank" rel="noopener" data-titel="Fantasia" data-fassungen="fantasia.png"><img src="bilder/signaturen/fantasia.png" alt="Fantasia" width="475" height="200" loading="lazy"><span class="sig-name">Fantasia</span></a>
+            <a class="sig" href="bilder/signaturen/girls-love-2.png" target="_blank" rel="noopener" data-titel="Girls Love" data-fassungen="girls-love-1.png|girls-love-2.png"><img src="bilder/signaturen/girls-love-2.png" alt="Girls Love" width="450" height="150" loading="lazy"><span class="sig-name">Girls Love</span><span class="sig-zahl">2 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/hearts-of-girls-2.png" target="_blank" rel="noopener" data-titel="Hearts of Girls" data-fassungen="hearts-of-girls-1.png|hearts-of-girls-2.png"><img src="bilder/signaturen/hearts-of-girls-2.png" alt="Hearts of Girls" width="450" height="150" loading="lazy"><span class="sig-name">Hearts of Girls</span><span class="sig-zahl">2 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/true-love.png" target="_blank" rel="noopener" data-titel="True Love" data-fassungen="true-love.png"><img src="bilder/signaturen/true-love.png" alt="True Love" width="450" height="150" loading="lazy"><span class="sig-name">True Love</span></a>
+            <a class="sig" href="bilder/signaturen/lehrstunde-fuer-ami-7.png" target="_blank" rel="noopener" data-titel="Lehrstunde f&#252;r Ami" data-fassungen="lehrstunde-fuer-ami-1.png|lehrstunde-fuer-ami-2.png|lehrstunde-fuer-ami-3.png|lehrstunde-fuer-ami-4.png|lehrstunde-fuer-ami-5.png|lehrstunde-fuer-ami-6.png|lehrstunde-fuer-ami-7.png"><img src="bilder/signaturen/lehrstunde-fuer-ami-7.png" alt="Lehrstunde f&#252;r Ami" width="437" height="150" loading="lazy"><span class="sig-name">Lehrstunde f&#252;r Ami</span><span class="sig-zahl">7 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/haruka.png" target="_blank" rel="noopener" data-titel="Haruka" data-fassungen="haruka.png"><img src="bilder/signaturen/haruka.png" alt="Haruka" width="450" height="160" loading="lazy"><span class="sig-name">Haruka</span></a>
+            <a class="sig" href="bilder/signaturen/hibiki-gungnir.png" target="_blank" rel="noopener" data-titel="Hibiki – Gungnir" data-fassungen="hibiki-gungnir.png"><img src="bilder/signaturen/hibiki-gungnir.png" alt="Hibiki – Gungnir" width="500" height="150" loading="lazy"><span class="sig-name">Hibiki – Gungnir</span></a>
+            <a class="sig" href="bilder/signaturen/ice-hime-2.png" target="_blank" rel="noopener" data-titel="Ice-Hime" data-fassungen="ice-hime-1.png|ice-hime-2.png"><img src="bilder/signaturen/ice-hime-2.png" alt="Ice-Hime" width="500" height="200" loading="lazy"><span class="sig-name">Ice-Hime</span><span class="sig-zahl">2 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/kagome-rainbow-4.png" target="_blank" rel="noopener" data-titel="Kagome Rainbow" data-fassungen="kagome-rainbow-1.png|kagome-rainbow-2.png|kagome-rainbow-3.png|kagome-rainbow-4.png"><img src="bilder/signaturen/kagome-rainbow-4.png" alt="Kagome Rainbow" width="500" height="200" loading="lazy"><span class="sig-name">Kagome Rainbow</span><span class="sig-zahl">4 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/karuta-roromiya.png" target="_blank" rel="noopener" data-titel="Karuta Roromiya" data-fassungen="karuta-roromiya.png"><img src="bilder/signaturen/karuta-roromiya.png" alt="Karuta Roromiya" width="450" height="150" loading="lazy"><span class="sig-name">Karuta Roromiya</span></a>
+            <a class="sig" href="bilder/signaturen/laxus-lightning.png" target="_blank" rel="noopener" data-titel="Laxus Lightning" data-fassungen="laxus-lightning.png"><img src="bilder/signaturen/laxus-lightning.png" alt="Laxus Lightning" width="450" height="150" loading="lazy"><span class="sig-name">Laxus Lightning</span></a>
+            <a class="sig" href="bilder/signaturen/natsu-fire-and-stars.png" target="_blank" rel="noopener" data-titel="Natsu – Fire and Stars" data-fassungen="natsu-fire-and-stars.png"><img src="bilder/signaturen/natsu-fire-and-stars.png" alt="Natsu – Fire and Stars" width="600" height="200" loading="lazy"><span class="sig-name">Natsu – Fire and Stars</span></a>
+            <a class="sig" href="bilder/signaturen/lucy-dark-future.png" target="_blank" rel="noopener" data-titel="Lucy – Dark Future" data-fassungen="lucy-dark-future.png"><img src="bilder/signaturen/lucy-dark-future.png" alt="Lucy – Dark Future" width="450" height="150" loading="lazy"><span class="sig-name">Lucy – Dark Future</span></a>
+            <a class="sig" href="bilder/signaturen/looking-towards-the-future.png" target="_blank" rel="noopener" data-titel="Looking towards the Future" data-fassungen="looking-towards-the-future.png"><img src="bilder/signaturen/looking-towards-the-future.png" alt="Looking towards the Future" width="500" height="200" loading="lazy"><span class="sig-name">Looking towards the Future</span></a>
+            <a class="sig" href="bilder/signaturen/machine-girl-twin.png" target="_blank" rel="noopener" data-titel="Machine Girl Twin" data-fassungen="machine-girl-twin.png"><img src="bilder/signaturen/machine-girl-twin.png" alt="Machine Girl Twin" width="450" height="150" loading="lazy"><span class="sig-name">Machine Girl Twin</span></a>
+            <a class="sig" href="bilder/signaturen/miko.png" target="_blank" rel="noopener" data-titel="Miko" data-fassungen="miko.png"><img src="bilder/signaturen/miko.png" alt="Miko" width="450" height="160" loading="lazy"><span class="sig-name">Miko</span></a>
+            <a class="sig" href="bilder/signaturen/nagisa.png" target="_blank" rel="noopener" data-titel="Nagisa" data-fassungen="nagisa.png"><img src="bilder/signaturen/nagisa.png" alt="Nagisa" width="450" height="160" loading="lazy"><span class="sig-name">Nagisa</span></a>
+            <a class="sig" href="bilder/signaturen/nanoha-the-ace.png" target="_blank" rel="noopener" data-titel="Nanoha the Ace" data-fassungen="nanoha-the-ace.png"><img src="bilder/signaturen/nanoha-the-ace.png" alt="Nanoha the Ace" width="450" height="150" loading="lazy"><span class="sig-name">Nanoha the Ace</span></a>
+            <a class="sig" href="bilder/signaturen/reinforce.png" target="_blank" rel="noopener" data-titel="Reinforce" data-fassungen="reinforce.png"><img src="bilder/signaturen/reinforce.png" alt="Reinforce" width="450" height="160" loading="lazy"><span class="sig-name">Reinforce</span></a>
+            <a class="sig" href="bilder/signaturen/resonance-of-fate-leanne-2.png" target="_blank" rel="noopener" data-titel="Resonance of Fate – Leanne" data-fassungen="resonance-of-fate-leanne-1.png|resonance-of-fate-leanne-2.png"><img src="bilder/signaturen/resonance-of-fate-leanne-2.png" alt="Resonance of Fate – Leanne" width="450" height="150" loading="lazy"><span class="sig-name">Resonance of Fate – Leanne</span><span class="sig-zahl">2 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/sailor-moon-crystal.png" target="_blank" rel="noopener" data-titel="Sailor Moon Crystal" data-fassungen="sailor-moon-crystal.png"><img src="bilder/signaturen/sailor-moon-crystal.png" alt="Sailor Moon Crystal" width="680" height="240" loading="lazy"><span class="sig-name">Sailor Moon Crystal</span></a>
+            <a class="sig" href="bilder/signaturen/sailor-chibi-moon-2.png" target="_blank" rel="noopener" data-titel="Sailor Chibi Moon" data-fassungen="sailor-chibi-moon-1.png|sailor-chibi-moon-2.png"><img src="bilder/signaturen/sailor-chibi-moon-2.png" alt="Sailor Chibi Moon" width="600" height="200" loading="lazy"><span class="sig-name">Sailor Chibi Moon</span><span class="sig-zahl">2 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/sailor-mercury-5.png" target="_blank" rel="noopener" data-titel="Sailor Mercury" data-fassungen="sailor-mercury-1.png|sailor-mercury-2.png|sailor-mercury-3.png|sailor-mercury-4.png|sailor-mercury-5.png"><img src="bilder/signaturen/sailor-mercury-5.png" alt="Sailor Mercury" width="600" height="200" loading="lazy"><span class="sig-name">Sailor Mercury</span><span class="sig-zahl">5 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/sailor-mercury-animiert.gif" target="_blank" rel="noopener" data-titel="Sailor Mercury (animiert)" data-fassungen="sailor-mercury-animiert.gif"><img src="bilder/signaturen/sailor-mercury-animiert.gif" alt="Sailor Mercury (animiert)" width="500" height="150" loading="lazy"><span class="sig-name">Sailor Mercury (animiert)</span></a>
+            <a class="sig" href="bilder/signaturen/ami-mizuno.png" target="_blank" rel="noopener" data-titel="Ami Mizuno" data-fassungen="ami-mizuno.png"><img src="bilder/signaturen/ami-mizuno.png" alt="Ami Mizuno" width="400" height="160" loading="lazy"><span class="sig-name">Ami Mizuno</span></a>
+            <a class="sig" href="bilder/signaturen/battle-colorful.png" target="_blank" rel="noopener" data-titel="Battle Colorful" data-fassungen="battle-colorful.png"><img src="bilder/signaturen/battle-colorful.png" alt="Battle Colorful" width="475" height="200" loading="lazy"><span class="sig-name">Battle Colorful</span></a>
+            <a class="sig" href="bilder/signaturen/shaolan.png" target="_blank" rel="noopener" data-titel="Shaolan" data-fassungen="shaolan.png"><img src="bilder/signaturen/shaolan.png" alt="Shaolan" width="500" height="200" loading="lazy"><span class="sig-name">Shaolan</span></a>
+            <a class="sig" href="bilder/signaturen/shaolan-legend.png" target="_blank" rel="noopener" data-titel="Shaolan – Legend" data-fassungen="shaolan-legend.png"><img src="bilder/signaturen/shaolan-legend.png" alt="Shaolan – Legend" width="500" height="200" loading="lazy"><span class="sig-name">Shaolan – Legend</span></a>
+            <a class="sig" href="bilder/signaturen/skydream.png" target="_blank" rel="noopener" data-titel="SkyDream" data-fassungen="skydream.png"><img src="bilder/signaturen/skydream.png" alt="SkyDream" width="450" height="200" loading="lazy"><span class="sig-name">SkyDream</span></a>
+            <a class="sig" href="bilder/signaturen/strong-company.png" target="_blank" rel="noopener" data-titel="Strong Company" data-fassungen="strong-company.png"><img src="bilder/signaturen/strong-company.png" alt="Strong Company" width="400" height="150" loading="lazy"><span class="sig-name">Strong Company</span></a>
+            <a class="sig" href="bilder/signaturen/wintermusik.png" target="_blank" rel="noopener" data-titel="Wintermusik" data-fassungen="wintermusik.png"><img src="bilder/signaturen/wintermusik.png" alt="Wintermusik" width="600" height="200" loading="lazy"><span class="sig-name">Wintermusik</span></a>
+            <a class="sig" href="bilder/signaturen/yellow-flower-girl.png" target="_blank" rel="noopener" data-titel="Yellow Flower Girl" data-fassungen="yellow-flower-girl.png"><img src="bilder/signaturen/yellow-flower-girl.png" alt="Yellow Flower Girl" width="450" height="150" loading="lazy"><span class="sig-name">Yellow Flower Girl</span></a>
+            <a class="sig" href="bilder/signaturen/eternal-love-3.png" target="_blank" rel="noopener" data-titel="Eternal Love (f&#252;r ADTonko)" data-fassungen="eternal-love-1.png|eternal-love-2.png|eternal-love-3.png"><img src="bilder/signaturen/eternal-love-3.png" alt="Eternal Love (f&#252;r ADTonko)" width="600" height="200" loading="lazy"><span class="sig-name">Eternal Love (f&#252;r ADTonko)</span><span class="sig-zahl">3 Fassungen</span></a>
+            <a class="sig" href="bilder/signaturen/queen-of-darkness-7.png" target="_blank" rel="noopener" data-titel="Queen of Darkness (f&#252;r Sunji)" data-fassungen="queen-of-darkness-1.png|queen-of-darkness-2.png|queen-of-darkness-3.png|queen-of-darkness-4.png|queen-of-darkness-5.png|queen-of-darkness-6.png|queen-of-darkness-7.png"><img src="bilder/signaturen/queen-of-darkness-7.png" alt="Queen of Darkness (f&#252;r Sunji)" width="400" height="200" loading="lazy"><span class="sig-name">Queen of Darkness (f&#252;r Sunji)</span><span class="sig-zahl">7 Fassungen</span></a>
           </div>
+          <div class="knopfreihe"><a class="knopf" href="#grafiken" data-ziel="grafiken">Zurück zur Übersicht</a></div>
         </div>
       </section>
     </div>
@@ -463,6 +567,15 @@
     </footer>
 
     <div class="glas" aria-hidden="true"></div>
+
+    <!-- Fenster: alle Fassungen einer Signatur -->
+    <div class="fassungen" role="dialog" aria-modal="true" aria-label="Alle Fassungen">
+      <div class="fassungen-box">
+        <h2><span class="zeichen">▰</span><span class="fassungen-titel"></span></h2>
+        <button class="knopf fassungen-zu" type="button" title="Schließen">✕</button>
+        <div class="fassungen-liste"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -573,6 +686,33 @@
     sym.style.visibility = 'visible';
   }
   setzeSymbol();
+
+  /* Signaturen: Klick auf eine Kachel mit mehreren Fassungen zeigt alle in einem Fenster */
+  const fassFenster = document.querySelector('.fassungen');
+  document.querySelectorAll('.sig').forEach(kachel => {
+    const liste = kachel.dataset.fassungen.split('|');
+    if (liste.length < 2) return;                       // nur eine Fassung: Bild öffnet sich wie gewohnt
+    kachel.addEventListener('click', e => {
+      e.preventDefault();
+      fassFenster.querySelector('.fassungen-titel').textContent = kachel.dataset.titel + ' – ' + liste.length + ' Fassungen';
+      const ziel = fassFenster.querySelector('.fassungen-liste');
+      ziel.innerHTML = '';
+      liste.forEach((datei, i) => {
+        const fig = document.createElement('figure');
+        const a = document.createElement('a'); a.href = 'bilder/signaturen/' + datei; a.target = '_blank'; a.rel = 'noopener';
+        const img = document.createElement('img'); img.src = a.href; img.alt = kachel.dataset.titel + ' – Fassung ' + (i + 1);
+        const cap = document.createElement('figcaption'); cap.textContent = 'Fassung ' + (i + 1);
+        a.appendChild(img); fig.appendChild(a); fig.appendChild(cap); ziel.appendChild(fig);
+      });
+      fassFenster.classList.add('offen');
+      fassFenster.querySelector('.fassungen-zu').focus();
+    });
+  });
+  const schliesseFassungen = () => fassFenster.classList.remove('offen');
+  fassFenster.querySelector('.fassungen-zu').addEventListener('click', schliesseFassungen);
+  fassFenster.addEventListener('click', e => { if (e.target === fassFenster) schliesseFassungen(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') schliesseFassungen(); });
+
   if (document.fonts) document.fonts.ready.then(setzeSymbol);
   window.addEventListener('load', setzeSymbol);
 
